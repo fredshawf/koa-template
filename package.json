@@ -7,11 +7,14 @@
     "lib": "lib"
   },
   "scripts": {
+    "start": "bin/server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "debug": "^3.2.2",
+    "knex": "^0.15.2",
     "koa": "^2.5.2",
     "koa-body": "^4.0.4",
     "koa-bodyparser": "^4.2.1",
@@ -21,6 +24,8 @@
     "koa-querybody": "^1.0.2",
     "koa-router": "^7.4.0",
     "koa-session": "^5.9.0",
-    "koa-static": "^5.0.0"
+    "koa-static": "^5.0.0",
+    "objection": "^1.2.6",
+    "require-directory": "^2.1.1"
   }
 }

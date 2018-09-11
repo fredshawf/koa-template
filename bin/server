@@ -1,0 +1,4 @@
+#! /bin/bash
+
+node ./config/boot.js
+
