@@ -1,4 +1,28 @@
-#! /bin/bash
+#!/usr/bin/env node
 
-node ./config/boot.js
+const program = require('commander');
+// const config = require('../config')
 
+
+program
+  .version('0.1.0')
+  .option('-h, --host [value]', 'host to be bind')
+  .option('-p, --port [n]', 'port to be listen')
+  .option('-e, --environment [value]', 'specify NODE_ENV')
+  .parse(process.argv);
+  
+
+console.log(program.host);
+console.log(program.port);
+console.log(program.environment);
+
+
+if (typeof(process.env['NODE_ENV']) !== 'string' && process.env['NODE_ENV'] === ''){
+  process.env['NODE_ENV'] = 'development';
+}
+
+
+
+
+// require('../config/boot');
+// app.li
