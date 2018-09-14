@@ -2,7 +2,8 @@
 
 module.exports = {
   
-  
+  // 日志级别
+  debug_level: 'info'
   
   
   

@@ -2,8 +2,8 @@
 
 module.exports = {
   
-  
-  debug_level: ['*']
+  // 日志级别
+  debug_level: 'debug'
   
   
   
