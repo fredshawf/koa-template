@@ -13,3 +13,5 @@ Koa.app.config = require(`./environments/${Koa.env}`);
 
 // 加载初始化脚本
 const initializers = requireDirectory(module, './initializers');
+
+console.log(Abc.ccc);
