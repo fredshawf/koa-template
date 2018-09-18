@@ -14,7 +14,6 @@ let env = program.environment || 'development';
   
 process.env['NODE_ENV'] = env;
 
-require('../config/boot.js');
 require('../config/app.js');
 
 Koa.app.listen({host: host, port: port}, () => {

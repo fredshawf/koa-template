@@ -1,4 +1,4 @@
-const requireDirectory = require('require-directory');
+const Boot = require('./boot');
 
 global.Koa = require('koa');
 Koa.app = new Koa();
@@ -7,11 +7,19 @@ Koa.env = process.env['NODE_ENV'];
 // cookie salt
 Koa.app.keys = require(`./secrets.js`)[Koa.env];
 
-// 加载配置信息
-Koa.app.config = require(`./environments/${Koa.env}`);
+// 全局配置
+Koa.app.config = {
+  // 设置时区
+  time_zone: 'Beijing',
+  
+  // 设置本地化
+  default_locale: "zh-CN"
+}
 
+// 加载不同环境(开发、测试、生产)个性化配置
+require(`./environments/${Koa.env}`);
 
-// 加载初始化脚本
-const initializers = requireDirectory(module, './initializers');
+// 开始引导
+Boot.start();
 
 console.log(Abc.ccc);

@@ -1,12 +1,7 @@
 // 开发环境应用配置
 
-module.exports = {
+Object.assign(Koa.app.config, {
   
-  // 设置时区
-  time_zone: 'Beijing',
-  
-  // 设置本地化
-  default_locale: "zh-CN",
   
   // 日志级别
   debug_level: 'debug',
@@ -28,5 +23,5 @@ module.exports = {
   
   
   
-}
+});
 
