@@ -8,6 +8,9 @@
   },
   "scripts": {
     "start": "bin/server",
+    "s": "bin/server",
+    "console": "bin/console",
+    "c": "bin/console",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
