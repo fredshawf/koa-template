@@ -6,8 +6,6 @@ Object.assign(Koa.app.config, {
   // 日志级别
   debug_level: 'debug',
   
-  // 类的自动加载路径
-  autoload_paths: ['app', 'lib'],
   
   // 是否缓存类，生产环境应为true
   cache_classes: false,

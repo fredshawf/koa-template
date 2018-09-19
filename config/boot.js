@@ -1,7 +1,5 @@
-const Path = require('path');
-const FS = require('fs');
 const requireDirectory = require('require-directory');
-const ClassLoader = require('.class_loader');
+const ClassLoader = require('./class_loader');
 
 
 module.exports = class Boot {
@@ -44,13 +42,14 @@ module.exports = class Boot {
   _proxy_global_variables() {
     global.__proto__ = new Proxy(global.__proto__, {
       get: (tar, attr) => {  
-        return global.classes[attr] || _try_load(attr) || Reflect.get(tar, attr);
+        return global.classes[attr] || this._try_load(attr) || tar[attr];
       }
     });
   }
   
   _try_load(class_name) {
-    return this.class_loader.load(class_name);
+    let klass = this.class_loader.load(class_name);
+    return klass;
   }
   
 }
