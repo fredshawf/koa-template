@@ -1,5 +1,5 @@
 const requireDirectory = require('require-directory');
-const ClassLoader = require('./class_loader');
+const ClassAutoloader = require('class-autoloader');
 
 
 module.exports = class Boot {
@@ -28,7 +28,7 @@ module.exports = class Boot {
   
   // use autoload
   _set_class_loader() {
-    this.class_loader = new ClassLoader(Koa.app.config);
+    this.class_loader = new ClassAutoloader(Koa.app.config);
   }
   
   
