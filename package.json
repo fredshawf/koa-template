@@ -16,7 +16,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "class-autoloader": "^1.0.0",
+    "class-autoloader": "^1.0.1",
     "commander": "^2.18.0",
     "debug": "^3.2.2",
     "knex": "^0.15.2",
