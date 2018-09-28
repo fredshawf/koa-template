@@ -1,7 +1,6 @@
 const requireDirectory = require('require-directory');
 const ClassAutoloader = require('class-autoloader');
 
-
 module.exports = class Boot {
   
   static get_singleton() {
@@ -17,6 +16,9 @@ module.exports = class Boot {
     
     // autoload
     booter._set_class_loader()
+    
+    // wrap middleware
+    booter._initialize_middleware_stack()
   }
   
   
@@ -32,6 +34,12 @@ module.exports = class Boot {
   }
   
   
+  _initialize_middleware_stack() {
+    const Middlewares = require('./middlewares')
+    for (let middleware of Middlewares) {
+      Koa.app.use(middleware)
+    }
+  }
   
   
 }

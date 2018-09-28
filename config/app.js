@@ -1,8 +1,10 @@
 const Boot = require('./boot');
+const path = require('path')
 
 global.Koa = require('koa');
 Koa.app = new Koa();
 Koa.env = process.env['NODE_ENV'] || 'development';
+Koa.root = path.join(__dirname, '..');
 
 // cookie salt
 Koa.app.keys = require(`./secrets.js`)[Koa.env];
