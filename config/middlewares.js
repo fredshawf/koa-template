@@ -1,14 +1,17 @@
 const koa_static = require('koa-static');
-const methodOverride = require('koa-methodoverride');
-const koa_error = require('koa-error')
-
-
-
+const koa_methodOverride = require('koa-methodoverride');
+const koa_error = require('koa-error');
+const koa_session = require('koa-session');
+const koa_body = require('koa-body');
+const koa_querybody = require('koa-querybody');
+const conditional = require('koa-conditional-get');
+const etag = require('koa-etag');
+const views = require('koa-views');
 
 
 module.exports = [
   koa_static('public'),
-  methodOverride(),
+  koa_methodOverride(),
   // logger
   async (ctx, next) => {
     let begin_time = new Date();
@@ -21,9 +24,32 @@ module.exports = [
     let end_time = new Date();
     let end_log = `Completed ${ctx.status} ${ctx.message} in ${end_time - begin_time}ms\n`;
     Koa.logger.info(end_log);
-  },  
+  },
   
-  koa_error({engine: 'ejs', template: `${Koa.root}/public/error.ejs`})
+  // 异常处理
+  koa_error({engine: 'ejs', template: `${Koa.root}/public/error.ejs`}),
+  // 回话
+  koa_session({},Koa.app),
+  // 参数
+  koa_body(),
+  koa_querybody(),
+  // 客户端缓存
+  conditional(),
+  etag(),
+  
+  // 视图引擎
+  views(Koa.root + '/app/views', {
+    extension: 'ejs'
+  }),
+  
+  
+  async (ctx, next) =>{ 
+    await next()
+    await ctx.render('hello');
+    await console.log(ctx.body)
+  }
+  
+  
   
   
   
