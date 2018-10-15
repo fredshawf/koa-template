@@ -42,10 +42,12 @@ module.exports = [
     extension: 'ejs'
   }),
   
+
   
   async (ctx, next) =>{ 
     await ctx.render('hello', {a: "这是打飞机"});
   }
+
   
   
   
