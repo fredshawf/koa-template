@@ -7,7 +7,7 @@ const koa_querybody = require('koa-querybody');
 const conditional = require('koa-conditional-get');
 const etag = require('koa-etag');
 const views = require('koa-views');
-
+const router = require('./routes');
 
 module.exports = [
   koa_static('public'),
@@ -42,11 +42,8 @@ module.exports = [
     extension: 'ejs'
   }),
   
-
+  router.routes()
   
-  async (ctx, next) =>{ 
-    await ctx.render('hello', {a: "这是打飞机"});
-  }
 
   
   
