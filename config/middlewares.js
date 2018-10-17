@@ -28,12 +28,6 @@ module.exports = [
   
   // 异常处理
   koa_error({engine: 'ejs', template: `${Koa.root}/public/error.ejs`}),
-  
-  
-  // 数据库
-  
-  
-  
   // 回话
   koa_session({},Koa.app),
   // 参数
@@ -51,8 +45,6 @@ module.exports = [
   router.routes()
   
 
-  
-  
   
   
 ]

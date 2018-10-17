@@ -2,7 +2,9 @@
 module.exports = class ApplicationController {
   
   async index(ctx) {
-    await ctx.render('hello', {a: ctx.captures});
+    let user = await User.query().limit(1).first();
+    
+    await ctx.render('hello', {a: user.username});
     
   }
   
