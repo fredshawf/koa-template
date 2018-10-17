@@ -1,6 +1,6 @@
 // 开发环境应用配置
 
-Object.assign(Koa.app.config, {
+module.exports = {
   
   
   // 日志级别
@@ -21,5 +21,5 @@ Object.assign(Koa.app.config, {
   
   
   
-});
+};
 

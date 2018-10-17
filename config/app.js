@@ -6,8 +6,13 @@ Koa.app = new Koa();
 Koa.env = process.env['NODE_ENV'] || 'development';
 Koa.root = path.join(__dirname, '..');
 
-// cookie salt
-Koa.app.keys = require(`./secrets.js`)[Koa.env];
+// cookie salt config 
+const secret_config = require(`./secrets.js`)[Koa.env];
+// environment config
+const environment_config = require(`./environments/${Koa.env}`);
+// database config
+const database_config = require(`./database`)[Koa.env];
+
 
 // 全局配置
 Koa.app.config = {
@@ -21,8 +26,9 @@ Koa.app.config = {
   default_locale: "zh-CN"
 }
 
-// 加载不同环境(开发、测试、生产)个性化配置
-require(`./environments/${Koa.env}`);
+Koa.app.keys = Koa.app.config['app_keys'] = secret_config
+Object.assign(Koa.app.config, environment_config)
+Koa.app.config['database_config'] = database_config
 
 // 开始引导
 Boot.start();
