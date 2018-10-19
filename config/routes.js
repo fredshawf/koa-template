@@ -1,5 +1,5 @@
 const Router = require('koa-router');
-const RouterGenerator = require('./koa-router-generator');
+const RouterGenerator = require('./koa-route-generator');
 
 const router = new Router();
 module.exports = Koa.app.router = router
@@ -7,35 +7,35 @@ module.exports = Koa.app.router = router
 
 // Koa.app.router.get('/abc/:id/:name', BaseController.action);
 
-RouterGenerator.draw(router, function(generator) {
+RouterGenerator.draw(router, function() {
   
-  //1 TODO: namespace
-  this.namespace('abc', function(space){
+  // 1 TODO: namespace
+  // this.namespace('abc', function(space){
+  //
+  //   //2 TODO: resource with opts <controller action namespace (only except)>
+  //   this.resources('application', {controller: 'ApplicationController'}, function(){
+  //     //3 TODO: member/collection
+  //     this.member(function(){
+  //       this.get('adssdf')
+  //     })
+  //   })
     
-    //2 TODO: resource with opts <controller action namespace (only except)>
-    this.resources('application', {controller: 'ApplicationController'}, function(){
-      //3 TODO: member/collection 
-      this.member(function(){
-        this.get('adssdf')
-      })
-    })
-    
-    //4 TODO: 普通的基于koa-router的重写
-    this.get('/path', 'Application#index');
-    this.post('/path/:id', 'Application#create');
-    
-  })
+  // 4 TODO: 普通的基于koa-router的重写
+  //   this.get('/path', 'Application#index');
+  //   this.post('/path/:id', 'Application#create');
+  //
+  // })
   
-  //5 TODO: 普通的基于koa-router的重写
-  this.get('/path', 'Application#index');
-  this.post('/path/:id', 'Application#create');
+  // 5 TODO: 普通的基于koa-router的重写
+  // this.get('/path', 'Application#index');
+  //   this.post('/path/:id', 'Application#create');
   
-  //6 TODO: 基于controller action写法
-  this.all('/:controller/:action')
+  // 6 TODO: 基于controller action写法
+  // this.all('/:controller/:action')
   
   
   // 纯koa-router写法
-  router.get('/abc', async () => {})
+  // router.get('/abc', async () => {})
   
   
   
