@@ -33,6 +33,7 @@
     "koa-session": "^5.9.0",
     "koa-static": "^5.0.0",
     "koa-views": "^6.1.4",
+    "mysql2": "^1.6.1",
     "objection": "^1.2.6",
     "require-directory": "^2.1.1",
     "winston": "^3.1.0",
