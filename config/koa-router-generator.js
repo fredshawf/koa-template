@@ -1,11 +1,26 @@
+const RouterDispatcher = require('./koa-router-dispatcher');
+
 
 class RouterGenerator {
   
   static draw(router, func) {
+    this.draw_common_route(router);
+    
     let generator = new RouterGenerator(router);
     generator.draw_func(func);
     
     return generator;
+  }
+  
+  
+  static draw_common_route(router) {
+    for(let method of ['get', 'put', 'post', 'patch', 'delete']) {
+      RouterGenerator.prototype[method] = (path, target) => {
+        // let dispatcher = new RouterDispatcher(target);
+        router[method](path, RouterDispatcher.dispatch(target));
+      }
+    }
+    RouterGenerator.prototype['del'] = RouterGenerator.prototype['delete'];
   }
   
   
@@ -32,25 +47,6 @@ class RouterGenerator {
 }
 
 
-for(let method in ['get', 'put', 'post', 'patch', 'delete']) {
-  RouterGenerator.prototype[method] = (path, target) => {
-    
-    if (typeof(target) === 'string') {
-      let [controller, action] = target.split('#');
-      if (controller && action) {
-        
-        
-      }
-    }
-    
-    
-    
-    
-  }
-  
-}
-
-RouterGenerator.prototype['del'] = RouterGenerator.prototype['delete'];
 
 
 

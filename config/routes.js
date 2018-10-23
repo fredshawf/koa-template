@@ -1,14 +1,18 @@
 const Router = require('koa-router');
-const RouterGenerator = require('./koa-route-generator');
+const RouterGenerator = require('./koa-router-generator');
 
 const router = new Router();
-module.exports = Koa.app.router = router
+module.exports = Koa.app.router = router;
 
 
 // Koa.app.router.get('/abc/:id/:name', BaseController.action);
 
 RouterGenerator.draw(router, function() {
   
+  
+  this.get("/abc", 'ApplicationController#index');
+  
+  this.post('/abc', 'ApplicationController#create')
   // 1 TODO: namespace
   // this.namespace('abc', function(space){
   //
