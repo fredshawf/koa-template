@@ -1,4 +1,3 @@
-
 module.exports = class ApplicationController {
   
   async index() {
@@ -8,9 +7,7 @@ module.exports = class ApplicationController {
   }
   
   
-  async create() {
-    console.log(JSON.stringify(this.params))
-    console.log(JSON.stringify(this.ctx.request.files))
+  async create() {    
     this.ctx.body = '123123';
     
   }
