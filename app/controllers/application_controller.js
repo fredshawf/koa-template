@@ -7,7 +7,7 @@ module.exports = class ApplicationController {
   }
   
   
-  async create() {    
+  async create() { 
     this.ctx.body = '123123';
     
   }

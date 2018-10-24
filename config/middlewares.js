@@ -41,7 +41,6 @@ module.exports = [
       onFileBegin:(name,file) => {} // 文件上传前的设置
     }
   }),
-  
   koa_querybody({logger: Koa.logger}),
   // 客户端缓存
   conditional(),
