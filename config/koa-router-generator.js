@@ -5,42 +5,37 @@ class RouterGenerator {
   
   static draw(router, func) {
     let generator = new RouterGenerator(router);
-    generator.draw_func(func);
     
+    generator.draw_func(func);
     return generator;
   }
   
-  
-  constructor(router) {
-    this.router = router;
-    this.namespace_names = []
-    this.define_common_generator()
-  }
-  
-  define_common_generator() {
+  static define_generator_methods() {
     for(let method of ['get', 'put', 'post', 'patch', 'delete']) {
-      this.constructor.prototype[method] = (path, target) => {
-        
+      this.prototype[method] = function (path, target) {
+
         let path_prefix = this.path_prefix();
         if (target.prefix) path_prefix += target.prefix[0] === '/' ? target.prefix : `/${target.prefix}`;
         if (!target.prefix && target.namespace) path_prefix += `/${namespace}`;
-        
-        let namespace_names = this.namespace_names
+      
+        let namespace_names = Object.assign([], this.namespace_names)
         if (target.namespace) namespace_names.push(target.namespace);
-        Object.assign(target, {namespace: namespace_names})
+        if (typeof(target) === 'object') Object.assign(target, {namespace: namespace_names});
         
-        this.router[method](path_prefix, RouterDispatcher.dispatch(target));
+        this.router[method](path_prefix + path, new RouterDispatcher(target).dispatch());
       }
     }
-    this.constructor.prototype['del'] = this.constructor.prototype['delete'];
+    this.prototype['del'] = this.constructor.prototype['delete'];
+    
+  }
+  
+  constructor(router) {
+    this.router = router;
+    this.namespace_names = [];
   }
   
   path_prefix() {
-    return `/${this.namespace_names().join('/')}`;
-  }
-  
-  namespace_names() {
-    return [];
+    return this.namespace_names.length > 0 ? `/${this.namespace_names.join('/')}` : '';
   }
   
   
@@ -50,7 +45,7 @@ class RouterGenerator {
   
   
   namespace(space, func) {
-    new Namespace(this.router, [space]).draw_func(func);
+    new Namespace(this.router, space).draw_func(func);
   }
   
   
@@ -60,15 +55,19 @@ class RouterGenerator {
   
 }
 
+RouterGenerator.define_generator_methods()
+
 
 
 class Namespace extends RouterGenerator {
-  constructor(router, space) {
+  constructor(router, ...space) {
     super(router);
-    this.space = space;
+    this.namespace_names = this.namespace_names.concat(space);
   }
   
-  
+  namespace(space, func) {
+    new Namespace(this.router, ...this.namespace_names.concat(space)).draw_func(func);
+  }
   
 }
 

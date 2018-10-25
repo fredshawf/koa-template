@@ -11,13 +11,17 @@ RouterGenerator.draw(router, function() {
   
   
   this.namespace("xiao", function() {
-    this.get("/abc", 'ApplicationController#index');
+    this.namespace("feng", function(){
+      this.get("/abcd", 'ApplicationController#index');
+    })
+    
+    
     
   })
   
   
   
-  this.post('/abc', 'ApplicationController#create');
+  this.get('/abc', 'ApplicationController#create');
   
   
   

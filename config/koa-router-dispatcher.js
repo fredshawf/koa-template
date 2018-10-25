@@ -19,20 +19,15 @@ module.exports = class RouterDispatcher {
   }
   
   
-  static dispatch(route_opts) {
-    
-    dispatcher = new RouterDispatcher(route_opts);
-    
+  dispatch() {
     return async (ctx) => {
-      if (dispatcher.middleware) {
-        return await dispatcher.middleware(ctx);
-      }
+      if (this.middleware) return await this.middleware(ctx);
     
       let request_opts = {};
       Object.assign(request_opts, ctx.params);
-      Object.assign(request_opts, dispatcher.opts);
+      Object.assign(request_opts, this.opts);
     
-      let controller = dispatcher.load_controller(request_opts);
+      let controller = this.load_controller(request_opts);
       let processor = new controller(ctx);
       processor.ctx = ctx;
     
@@ -41,14 +36,13 @@ module.exports = class RouterDispatcher {
       });
     
       let action = proxy[request_opts.action];
-    
+      
       if (action) {
         await action.apply(proxy);
       } else {
         ctx.throw(500, `Action: ${request_opts.action} is missing in Controller: ${controller.name}`)
       }
     }
-    
   }
   
   
