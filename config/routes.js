@@ -12,7 +12,7 @@ RouterGenerator.draw(router, function() {
   
   this.namespace("xiao", function() {
     this.namespace("feng", function(){
-      this.get("/abcd", 'ApplicationController#index');
+      this.get("/abcd", 'application#index');
     })
     
     
@@ -29,7 +29,7 @@ RouterGenerator.draw(router, function() {
   // 1 TODO: namespace
   // this.namespace('abc', function(space){
   //
-  //   //2 TODO: resource with opts <controller action namespace (only except)>
+  //   //2 TODO: resource with opts <controller namespace (only except)>
   //   this.resources('application', {controller: 'ApplicationController'}, function(){
   //     //3 TODO: member/collection
   //     this.member(function(){

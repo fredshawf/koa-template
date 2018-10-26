@@ -50,10 +50,23 @@ module.exports = class RouterDispatcher {
     if (typeof request_opts.controller === 'function') {
       return request_opts.controller;
     } else {
-      return eval(request_opts.controller);
+      let namespace = '';
+      if (request_opts.namespace && request_opts.namespace.length > 0) {
+        namespace = request_opts.namespace.join('.') + '.';
+      }
+      
+      let controller_name = this._camel_case(request_opts.controller);
+      if (!~controller_name.indexOf('Controller')) controller_name += 'Controller';
+      
+      return eval(namespace + controller_name);
     }    
   }
   
+  
+  _camel_case(underscore_name) {
+    let class_name = underscore_name.replace(/(^|_)([a-z])/g, function($0, $1, $2) { return $2.toUpperCase() } );
+    return class_name;
+  }
   
   
   
