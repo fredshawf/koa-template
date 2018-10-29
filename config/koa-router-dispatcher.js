@@ -12,7 +12,7 @@ module.exports = class RouterDispatcher {
     } else if (type_name === 'function') {
       this.middleware = anchor_or_opts;
     } else if (type_name === 'object') {
-      this.opts = opts;
+      this.opts = anchor_or_opts;
     } else {
       throw new TypeError("anchor_or_opts is not a string or function or object");
     }
@@ -52,7 +52,7 @@ module.exports = class RouterDispatcher {
     } else {
       let namespace = '';
       if (request_opts.namespace && request_opts.namespace.length > 0) {
-        namespace = request_opts.namespace.join('.') + '.';
+        namespace = request_opts.namespace.map((e) => {return this._camel_case(e)}).join('.') + '.';
       }
       
       let controller_name = this._camel_case(request_opts.controller);

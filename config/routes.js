@@ -10,18 +10,16 @@ module.exports = Koa.app.router = router;
 RouterGenerator.draw(router, function() {
   
   
-  this.namespace("xiao", function() {
-    this.namespace("feng", function(){
-      this.get("/abcd", 'application#index');
-    })
-    
-    
-    
-  })
+  // this.namespace("xiao", function() {
+  //   this.namespace("feng", function(){
+  //     this.get("/abcd", 'application#index');
+  //   })
+  // })
+  
+  this.resources('application', {namespace: 'xiao'});
   
   
-  
-  this.get('/abc', 'ApplicationController#create');
+  this.get('/abc', {controller: 'abc', namespace: 'xiao', action: 'index'});
   
   
   

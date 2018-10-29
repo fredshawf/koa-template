@@ -13,12 +13,12 @@ class RouterGenerator {
   static define_generator_methods() {
     for(let method of ['get', 'put', 'post', 'patch', 'delete']) {
       this.prototype[method] = function (path, target) {
-
+        
         let path_prefix = this.path_prefix();
         if (target.prefix) path_prefix += target.prefix[0] === '/' ? target.prefix : `/${target.prefix}`;
-        if (!target.prefix && target.namespace) path_prefix += `/${namespace}`;
+        if (!target.prefix && target.namespace) path_prefix += `/${target.namespace}`;
         
-        if (!~path.indexOf('/')) path = `/${path}`;
+        if (!(path[0] === '/')) path = `/${path}`;
       
         let namespace_names = Object.assign([], this.namespace_names)
         if (target.namespace) namespace_names.push(target.namespace);
@@ -53,10 +53,11 @@ class RouterGenerator {
   
   resources(resource_name, opts={}, func) {
     let namespace_names = Object.assign([], this.namespace_names);
-    if (opts.namespace) namespace_names.push(opts.namespace)
-    Object.assign(opts, {namespace: namespace_names})
+    if (opts.namespace) namespace_names.push(opts.namespace);
+    delete opts.namespace
+    opts.namespace_names = namespace_names;
     
-    new ResourcesGenerator(router, resource_name, opts)
+    new ResourcesGenerator(this.router, resource_name, opts);
   }
   
 }
@@ -80,29 +81,44 @@ class NamespaceGenerator extends RouterGenerator {
 
 class ResourcesGenerator extends RouterGenerator {
   
-  constructor(router, resource_name, opts) {  
+  constructor(router, resource_name, opts) {
     super(router);
     this.resource_name = resource_name;
-    if (!opts.controller) opts.controller = resource_name;
-    this.namespace_names = opts.namespace
+    this.namespace_names = opts.namespace_names;
     this.opts = opts;
+    if (!opts.controller) opts.controller = resource_name;
+    delete this.opts.namespace_names
+    
+    this.generate_restful();
   }
   
   generate_restful() {
-    restful_router = {
-      index: this.resource_name,
-      show: 
-      
+    let restful_router = {
+      index:    ['get', this.resource_name],
+      show:     ['get', this.resource_name + '/:id', 'show'],
+      new:      ['get', this.resource_name + '/new', 'new'],
+      create:   ['post', this.resource_name, 'create'],
+      edit:     ['get', this.resource_name + '/:id/edit', 'edit'],
+      update:   ['put', this.resource_name + '/:id', 'update'],
+      destroy:  ['delete', this.resource_name + '/:id', 'destroy']    
     }
-    this.get(this.resource_name, Object.assign(this.opts, {action: 'index'}));
-    this.get(this.resource_name + '/:id', this.opts);
     
+    let actions = ['index', 'show', 'new', 'create', 'edit', 'update', 'destroy'];
     
+    let allowed_actions = this.opts.only || actions.filter((i) => {
+      return this.opts.except ? !this.opts.except.includes(i) : true;
+    })
+    
+    for (let item in restful_router) {
+      if (!allowed_actions.includes(item)) continue;
+      let opts = Object.assign({}, this.opts);
+      this[restful_router[item][0]](restful_router[item][1], Object.assign( opts, {action: item }) );
+    }
   }
   
   
   controller_name() {
-    return this.opts.controller ? opts.controller : resource_name
+    return this.opts.controller ? this.opts.controller : this.resource_name
   }
   
   

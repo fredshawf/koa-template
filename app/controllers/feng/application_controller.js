@@ -7,8 +7,9 @@ module.exports = class ApplicationController {
   }
   
   
-  async create() { 
-    this.ctx.body = '123123';
+  async create() {
+    await this.render('hello', {a: JSON.stringify(this.params)});
+    // this.ctx.body = '123123';
     
   }
   
