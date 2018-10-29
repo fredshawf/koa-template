@@ -58,6 +58,9 @@ module.exports = class RouterDispatcher {
       let controller_name = this._camel_case(request_opts.controller);
       if (!~controller_name.indexOf('Controller')) controller_name += 'Controller';
       
+      console.log(namespace)
+      console.log(controller_name)
+      
       return eval(namespace + controller_name);
     }    
   }

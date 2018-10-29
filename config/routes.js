@@ -16,10 +16,10 @@ RouterGenerator.draw(router, function() {
   //   })
   // })
   
-  this.resources('application', {namespace: 'xiao'});
+  this.resources('application', {namespace: 'feng'});
   
   
-  this.get('/abc', {controller: 'abc', namespace: 'xiao', action: 'index'});
+  this.get('/abc', {controller: 'abc', namespace: 'feng', action: 'index'});
   
   
   
