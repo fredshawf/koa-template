@@ -8,7 +8,7 @@ const conditional = require('koa-conditional-get');
 const etag = require('koa-etag');
 const views = require('koa-views');
 const RouterGenerator = require('./koa-router-generator');
-const router = RouterGenerator.draw(Koa.root + '/config/routes', {logger: Koa.logger});
+const router = Koa.router = RouterGenerator.draw(Koa.root + '/config/routes', {logger: Koa.logger});
 
 module.exports = [
   koa_static('public'),
