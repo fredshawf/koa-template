@@ -38,12 +38,35 @@ module.exports = class RouterDispatcher {
       let action = proxy[request_opts.action];
       
       if (action) {
+        if (this.constructor.logger) {
+          this.constructor.logger.debug(`Processing by ${this.controller_name(request_opts)}#${action.name}`);
+          this.constructor.logger.debug(`  Parameters: ${JSON.stringify(ctx.params)}`);
+        }
+        
         await action.apply(proxy);
       } else {
-        ctx.throw(500, `Action: ${request_opts.action} is missing in Controller: ${controller.name}`)
+        ctx.throw(500, `Action: ${request_opts.action} is missing in Controller: ${this.controller_name(request_opts)}`)
       }
     }
   }
+  
+  
+  controller_name(request_opts) {
+    if (typeof request_opts.controller === 'function') {
+      return request_opts.controller.name;
+    } else {
+      let namespace = '';
+      if (request_opts.namespace && request_opts.namespace.length > 0) {
+        namespace = request_opts.namespace.map((e) => {return this._camel_case(e)}).join('.') + '.';
+      }
+      
+      let controller_name = this._camel_case(request_opts.controller);
+      if (!~controller_name.indexOf('Controller')) controller_name += 'Controller';
+      
+      return namespace + controller_name;
+    }
+  }
+  
   
   
   load_controller(request_opts) {
@@ -58,12 +81,11 @@ module.exports = class RouterDispatcher {
       let controller_name = this._camel_case(request_opts.controller);
       if (!~controller_name.indexOf('Controller')) controller_name += 'Controller';
       
-      console.log(namespace)
-      console.log(controller_name)
-      
       return eval(namespace + controller_name);
     }    
   }
+  
+  
   
   
   _camel_case(underscore_name) {

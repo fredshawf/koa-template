@@ -1,14 +1,20 @@
 const RouterDispatcher = require('./koa-router-dispatcher');
-
+const Router = require('koa-router');
 
 class RouterGenerator {
   
-  static draw(router, func) {
+  
+  static draw(path, opts={}) {
+    let func = require(path);
+    let router = new Router();
     let generator = new RouterGenerator(router);
     
+    RouterDispatcher.logger = opts.logger;
     generator.draw_func(func);
-    return generator;
+    
+    return router;
   }
+  
   
   static define_generator_methods() {
     for(let method of ['get', 'put', 'post', 'patch', 'delete']) {
@@ -19,7 +25,7 @@ class RouterGenerator {
         if (!target.prefix && target.namespace) path_prefix += `/${target.namespace}`;
         
         if (!(path[0] === '/')) path = `/${path}`;
-      
+        
         let namespace_names = Object.assign([], this.namespace_names)
         if (target.namespace) namespace_names.push(target.namespace);
         if (typeof(target) === 'object') Object.assign(target, {namespace: namespace_names});
@@ -27,8 +33,7 @@ class RouterGenerator {
         this.router[method](path_prefix + path, new RouterDispatcher(target).dispatch());
       }
     }
-    this.prototype['del'] = this.constructor.prototype['delete'];
-    
+    this.prototype['del'] = this.prototype['delete']; 
   }
   
   constructor(router) {
@@ -45,11 +50,9 @@ class RouterGenerator {
     func.apply(this);
   }
   
-  
   namespace(space, func) {
     new Namespace(this.router, space).draw_func(func);
   }
-  
   
   resources(resource_name, opts={}, func) {
     let namespace_names = Object.assign([], this.namespace_names);
@@ -57,7 +60,9 @@ class RouterGenerator {
     delete opts.namespace
     opts.namespace_names = namespace_names;
     
-    new ResourcesGenerator(this.router, resource_name, opts);
+    let r_generator = new ResourcesGenerator(this.router, resource_name, opts);
+    r_generator.generate_restful_routers();
+    if (func) r_generator.draw_func(func);
   }
   
 }
@@ -81,59 +86,115 @@ class NamespaceGenerator extends RouterGenerator {
 
 class ResourcesGenerator extends RouterGenerator {
   
+  static rewrite_generator_methods() {
+    for(let method of ['get', 'put', 'post', 'patch', 'delete', 'del']) {
+      this.prototype[`_${method}`] = this.prototype[method];
+      this.prototype[method] = function () {};
+    }
+  }
+  
+  
   constructor(router, resource_name, opts) {
     super(router);
     this.resource_name = resource_name;
+    this.nested = opts.nested;
     this.namespace_names = opts.namespace_names;
     this.opts = opts;
     if (!opts.controller) opts.controller = resource_name;
-    delete this.opts.namespace_names
-    
-    this.generate_restful();
   }
   
-  generate_restful() {
-    let restful_router = {
-      index:    ['get', this.resource_name],
-      show:     ['get', this.resource_name + '/:id', 'show'],
-      new:      ['get', this.resource_name + '/new', 'new'],
-      create:   ['post', this.resource_name, 'create'],
-      edit:     ['get', this.resource_name + '/:id/edit', 'edit'],
-      update:   ['put', this.resource_name + '/:id', 'update'],
-      destroy:  ['delete', this.resource_name + '/:id', 'destroy']    
+  generate_restful_routers() {
+    let resources = {
+      index:    ['get', ''],
+      show:     ['get', '/:id(\\d+)'],
+      new:      ['get', '/new'],
+      create:   ['post', ''],
+      edit:     ['get', '/:id(\\d+)/edit'],
+      update:   ['put', '/:id(\\d+)'],
+      destroy:  ['del', '/:id(\\d+)']    
     }
     
-    let actions = ['index', 'show', 'new', 'create', 'edit', 'update', 'destroy'];
-    
+    let actions = Object.keys(resources);
     let allowed_actions = this.opts.only || actions.filter((i) => {
       return this.opts.except ? !this.opts.except.includes(i) : true;
     })
     
-    for (let item in restful_router) {
-      if (!allowed_actions.includes(item)) continue;
+    for (let action of allowed_actions) {
       let opts = Object.assign({}, this.opts);
-      this[restful_router[item][0]](restful_router[item][1], Object.assign( opts, {action: item }) );
+      
+      this['_' + resources[action][0]](
+        resources[action][1],
+        Object.assign( opts, {action: action })
+      );
     }
+    return this;
   }
   
+  path_prefix() {
+    let super_path_prefix = super.path_prefix();
+    return this.nested ? 
+      `${this.nested.path_prefix()}/:${this.nested.resource_name}_id(\\d+)/${this.resource_name}` : 
+      (super_path_prefix + `/${this.resource_name}`);
+  }
   
   controller_name() {
     return this.opts.controller ? this.opts.controller : this.resource_name
   }
   
-  
-  member() {
-    
+  namespace(func) {
+    func.apply(this);
   }
   
-  
-  collection() {
-    
+  resources(resource_name, opts = {}, func) {
+    Object.assign(opts, {nested: this});
+    super.resources(resource_name, opts, func);
   }
   
+  member(func) {
+    new MemberResourcesGenerator(this.router, this.resource_name, Object.assign({}, this.opts)).draw_func(func)
+  }
+  
+  collection(func) {
+    new CollectionResourcesGenerator(this.router, this.resource_name, Object.assign({}, this.opts)).draw_func(func)
+  }
   
 }
+ResourcesGenerator.rewrite_generator_methods()
 
+
+
+class MemberResourcesGenerator extends ResourcesGenerator {
+  
+  path_prefix() {
+    let super_path_prefix = super.path_prefix()
+    return super_path_prefix + '/:id(\\d+)'
+  }
+  
+  static define_member_generator_methods() {
+    for(let method of ['get', 'put', 'post', 'patch', 'delete', 'del']) {
+      this.prototype[method] = function (member_name) {
+        let opts = Object.assign({}, this.opts);
+        this['_' + method](member_name, Object.assign( opts, {action: member_name }))
+      }
+    }
+  }
+}
+MemberResourcesGenerator.define_member_generator_methods()
+
+
+class CollectionResourcesGenerator extends ResourcesGenerator {
+  
+  static define_member_generator_methods() {
+    for(let method of ['get', 'put', 'post', 'patch', 'delete', 'del']) {
+      this.prototype[method] = function (collection_name) {
+        let opts = Object.assign({}, this.opts);
+        this['_' + method](collection_name, Object.assign( opts, {action: collection_name }))
+      }
+    }
+  }
+  
+}
+CollectionResourcesGenerator.define_member_generator_methods()
 
 
 module.exports = RouterGenerator

@@ -7,7 +7,8 @@ const koa_querybody = require('koa-querybody');
 const conditional = require('koa-conditional-get');
 const etag = require('koa-etag');
 const views = require('koa-views');
-const router = require('./routes');
+const RouterGenerator = require('./koa-router-generator');
+const router = RouterGenerator.draw(Koa.root + '/config/routes', {logger: Koa.logger});
 
 module.exports = [
   koa_static('public'),
@@ -41,7 +42,7 @@ module.exports = [
       onFileBegin:(name,file) => {} // 文件上传前的设置
     }
   }),
-  koa_querybody({logger: Koa.logger}),
+  koa_querybody(),
   // 客户端缓存
   conditional(),
   etag(),

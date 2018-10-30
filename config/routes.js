@@ -1,26 +1,31 @@
-const Router = require('koa-router');
-const RouterGenerator = require('./koa-router-generator');
+// const Router = require('koa-router');
+// const RouterGenerator = require('./koa-router-generator');
+//
+// const router = new Router();
+// module.exports = Koa.app.router = router;
 
-const router = new Router();
-module.exports = Koa.app.router = router;
 
-
-// Koa.app.router.get('/abc/:id/:name', BaseController.action);
-
-RouterGenerator.draw(router, function() {
+module.exports = function() {  
   
   
-  // this.namespace("xiao", function() {
-  //   this.namespace("feng", function(){
-  //     this.get("/abcd", 'application#index');
-  //   })
-  // })
+  // this.resources('application', {namespace: 'feng'}, function(){
+//     this.collection(function() {
+//       this.get('abc');
+//     })
+//
+//     this.member(function(){
+//       this.get('abcd')
+//
+//     })
+//
+//     this.resources('abc')
+//
+//   });
+//
+//
+//   this.get('/abc', {controller: 'abc', namespace: 'feng', action: 'index'});
   
-  this.resources('application', {namespace: 'feng'});
-  
-  
-  this.get('/abc', {controller: 'abc', namespace: 'feng', action: 'index'});
-  
+  this.resources('test');
   
   
   
@@ -54,4 +59,4 @@ RouterGenerator.draw(router, function() {
   
   
   
-})
+}
