@@ -15,7 +15,10 @@ module.exports = class Boot {
     booter._initialize_script();
     
     // autoload
-    booter._set_class_loader()
+    booter._set_class_loader();
+    
+    // init logger
+    booter._initialize_logger();
     
     // wrap middleware
     booter._initialize_middleware_stack()
@@ -31,6 +34,11 @@ module.exports = class Boot {
   // use autoload
   _set_class_loader() {
     this.class_loader = new ClassAutoloader(Koa.app.config);
+  }
+  
+  
+  _initialize_logger() {
+    Koa.logger = require('./logger')
   }
   
   

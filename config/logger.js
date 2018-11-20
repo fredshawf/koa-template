@@ -36,4 +36,4 @@ const logger = winston.createLogger({
 });
 
 
-Koa.logger = logger;
+module.exports = logger;
