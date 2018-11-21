@@ -13,11 +13,11 @@ module.exports = {
       charset : 'utf8'
     },
     migrations: {
-      directory: './../db/migrations',
+      directory: 'db/migrations',
       tableName: 'knex_migrations'
     },
     seeds: {
-      directory: './../db/seeds'
+      directory: 'db/seeds'
     },
     pool: { min: 0, max: 5 },
     debug: true
@@ -34,11 +34,11 @@ module.exports = {
       charset : 'utf8'
     },
     migrations: {
-      directory: './../db/migrations',
+      directory: 'db/migrations',
       tableName: 'knex_migrations'
     },
     seeds: {
-      directory: './../db/seeds'
+      directory: 'db/seeds'
     },
     pool: { min: 0, max: 5 },
     debug: true
@@ -55,7 +55,7 @@ module.exports = {
       charset : 'utf8'
     },
     migrations: {
-      directory: './../db/migrations',
+      directory: 'db/migrations',
       tableName: 'knex_migrations'
     },
     pool: { min: 0, max: 5 },
