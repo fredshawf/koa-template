@@ -34,7 +34,6 @@ module.exports = [
   // 参数
   koa_body({
     multipart:true, // 支持文件上传
-    encoding:'gzip',
     formidable:{
       // uploadDir: Koa.root + '/public/upload/', // 设置文件上传目录
       keepExtensions: true,    // 保持文件的后缀
