@@ -7,8 +7,9 @@ const koa_querybody = require('koa-querybody');
 const conditional = require('koa-conditional-get');
 const etag = require('koa-etag');
 const views = require('koa-views');
-const RouterGenerator = require('koa-actionpack').RouterGenerator;
-const router = Koa.router = RouterGenerator.draw(Koa.root + '/config/routes', {logger: Koa.logger});
+
+const RouteSet = require('koa-actionpack').RouteSet;
+const router = Koa.router = new RouteSet(Koa.root);
 
 module.exports = [
   koa_static('public'),

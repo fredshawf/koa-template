@@ -1,4 +1,6 @@
-module.exports = class TestController {
+const AppController = require('./app_controller');
+
+module.exports = class TestController extends AppController {
   
   async index() {
     await this.render('test/index', {a: 'index action'});

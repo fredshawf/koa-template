@@ -1,5 +1,4 @@
 const requireDirectory = require('require-directory');
-const ClassAutoloader = require('class-autoloader');
 
 module.exports = class Boot {
   
@@ -14,9 +13,6 @@ module.exports = class Boot {
     // initializers
     booter._initialize_script();
     
-    // autoload
-    booter._set_class_loader();
-    
     // init logger
     booter._initialize_logger();
     
@@ -28,12 +24,6 @@ module.exports = class Boot {
   // Excutes initializers in the directory (./initializers)
   _initialize_script() {
     this.initializers = requireDirectory(module, './initializers');
-  }
-  
-  
-  // use autoload
-  _set_class_loader() {
-    this.class_loader = new ClassAutoloader(Koa.app.config);
   }
   
   

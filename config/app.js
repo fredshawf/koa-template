@@ -19,9 +19,6 @@ Koa.app.config = {
   // 设置时区
   time_zone: 'Beijing',
   
-  // 类的自动加载路径
-  autoload_paths: ['app/controllers', 'app/jobs', 'app/models', 'lib'],
-  
   // 设置本地化
   default_locale: "zh-CN"
 }
