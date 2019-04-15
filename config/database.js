@@ -5,7 +5,7 @@ module.exports = {
   development: {
     client: 'mysql2',
     connection: {
-      database : 'koa-development',
+      database : 'oa_core_development',
       host : 'localhost',
       port : 3306,
       user : 'root',

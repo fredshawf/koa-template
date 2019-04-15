@@ -1,4 +1,4 @@
-const Model = require('./lib/model')
+const Model = require('./base_model')
 
 module.exports = class User extends Model {
   static get tableName() {

@@ -1,5 +1,5 @@
 const Boot = require('./boot');
-const path = require('path')
+const path = require('path');
 
 global.Koa = require('koa');
 Koa.app = new Koa();
@@ -7,11 +7,9 @@ Koa.env = process.env['NODE_ENV'] || 'development';
 Koa.root = path.join(__dirname, '..');
 
 // cookie salt config 
-const secret_config = require(`./secrets.js`)[Koa.env];
-// environment config
-const environment_config = require(`./environments/${Koa.env}`);
+const app_keys = require(`./keys`);
 // database config
-const database_config = require(`./database`)[Koa.env];
+const database_configs = require(`./database`);
 
 
 // 全局配置
@@ -20,12 +18,15 @@ Koa.app.config = {
   time_zone: 'Beijing',
   
   // 设置本地化
-  default_locale: "zh-CN"
+  default_locale: "zh-CN",
+
+  // 应用salt配置
+  app_keys: app_keys,
+
+  // 数据库配置
+  database_configs: database_configs
 }
 
-Koa.app.keys = Koa.app.config['app_keys'] = secret_config
-Object.assign(Koa.app.config, environment_config)
-Koa.app.config['database_config'] = database_config
 
 // 开始引导
 Boot.start();
