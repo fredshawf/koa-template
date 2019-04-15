@@ -5,7 +5,7 @@ module.exports = {
   development: {
     client: 'mysql2',
     connection: {
-      database : 'oa_core_development',
+      database : 'example_development',
       host : 'localhost',
       port : 3306,
       user : 'root',
@@ -26,7 +26,7 @@ module.exports = {
   staging: {
     client: 'mysql2',
     connection: {
-      database : 'koa-staging',
+      database : 'example_staging',
       host : 'localhost',
       port : 3306,
       user : 'root',
@@ -47,7 +47,7 @@ module.exports = {
   production: {
     client: 'mysql2',
     connection: {
-      database : 'koa-production',
+      database : 'example_production',
       host : 'localhost',
       port : 3306,
       user : 'root',
