@@ -2,9 +2,9 @@ const Boot = require('./boot');
 const path = require('path');
 
 global.Koa = require('koa');
-Koa.app = new Koa();
-Koa.env = process.env['NODE_ENV'] || 'development';
-Koa.root = path.join(__dirname, '..');
+Koa.app = Koa.app || new Koa();
+Koa.env = Koa.env || process.env['NODE_ENV'] || 'development';
+Koa.root = Koa.root || path.join(__dirname, '..');
 
 // cookie salt config 
 const app_keys = require(`./keys`);

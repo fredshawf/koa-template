@@ -10,6 +10,8 @@ module.exports = class Boot {
   static start() {
     let booter = this.get_singleton();
 
+    if (booter._is_initialized()) return;
+
     // merge environment config
     booter._merge_environment_config
     
@@ -24,8 +26,13 @@ module.exports = class Boot {
     
     // wrap middleware
     booter._initialize_middleware_stack()
+
+    booter._finish_initialize()
   }
 
+  static is_initialized() {
+    return this.get_singleton._is_initialized();
+  }
 
   _merge_environment_config() {
     let environment_config = require(`./environments/${Koa.env}`);
@@ -45,7 +52,7 @@ module.exports = class Boot {
   
   
   _initialize_logger() {
-    Koa.logger = require('./logger')
+    Koa.logger = Koa.logger || require('./logger')
   }
   
   
@@ -56,6 +63,14 @@ module.exports = class Boot {
     }
   }
   
+
+  _finish_initialize() {
+    this.is_initialized = true;
+  }
+
+  _is_initialized() {
+    return !!this.is_initialized;
+  }
   
 }
 
