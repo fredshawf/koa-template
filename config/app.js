@@ -1,7 +1,8 @@
+const Koa = require('koa');
 const Boot = require('./boot');
 const path = require('path');
 
-global.Koa = require('koa');
+global.Koa = Koa;
 Koa.app = new Koa();
 Koa.env = process.env['NODE_ENV'] || 'development';
 Koa.root = path.join(__dirname, '..');
