@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
-node -r ../config/app.js
+node -r ./config/app.js
 
 

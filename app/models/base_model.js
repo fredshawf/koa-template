@@ -8,11 +8,11 @@ class BaseModel extends Model {
   static set_knex(config_name = null) {
     this.knex_cache = this.knex_cache ? this.knex_cache : {};
 
-    config_name = config_name ? config_name : Koa.env;
+    config_name = config_name ? config_name : Koa.app.env;
 
     let cached_knex = this.knex_cache[config_name];
     if (!cached_knex) {
-      cached_knex = this.knex_cache[config_name] = this.generate_knex(db_configs[config_name]);
+      cached_knex = this.knex_cache[config_name] = this.generate_knex(db_configs);
     }
 
     this.knex(cached_knex);

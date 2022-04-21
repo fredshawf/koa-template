@@ -10,8 +10,8 @@ module.exports = class Boot {
   static start() {
     let booter = this.get_singleton();
 
-    // merge environment config
-    booter._merge_environment_config
+    // load configuration
+    booter._load_configuration();
     
     // initializers
     booter._initialize_script();
@@ -23,15 +23,24 @@ module.exports = class Boot {
     booter._initialize_logger();
     
     // wrap middleware
-    booter._initialize_middleware_stack()
+    booter._initialize_middleware_stack();
   }
 
 
-  _merge_environment_config() {
-    let environment_config = require(`./environments/${Koa.env}`);
-    Object.assign(Koa.app.config, environment_config);
+  _load_configuration() {
+    let global_config = require(`./environments/global`);
+    let env_config = require(`./environments/${Koa.app.env}`);
+    Koa.app.config = Object.assign(global_config, env_config);
+
+    // cookie salt config 
+    let app_keys = require(`./keys`);
+    Koa.app.config.app_keys = app_keys[Koa.app.env];
+
+    // database config
+    let database_configs = require(`./database`);
+    Koa.app.config.database_configs = database_configs[Koa.app.env];
   }
-  
+
   
   // Excutes initializers in the directory (./initializers)
   _initialize_script() {
@@ -40,7 +49,7 @@ module.exports = class Boot {
 
 
   _initialize_app_key() {
-    Koa.app.keys = Koa.app.config['app_keys'][Koa.env];
+    Koa.app.keys = Koa.app.config.app_keys;
   }
   
   

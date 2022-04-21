@@ -1,7 +1,7 @@
 const winston = require('winston');
 require('winston-daily-rotate-file');
 
-const filename_prifix = `${Koa.env}`;
+const filename_prifix = `${Koa.app.env}`;
 
 // 1.日志格式
 const myFormat = winston.format.printf(info => {
@@ -27,7 +27,7 @@ const file_transport = new winston.transports.File({
 
 
 // 3.创建日志对象(logger中的format为前置过滤处理，最终会被transports中的format再次过滤处理)
-const transports = Koa.env == 'development' ? [console_transport, file_transport] : [file_transport]
+const transports = Koa.app.env == 'development' ? [console_transport, file_transport] : [file_transport]
 
 const logger = winston.createLogger({
   level: Koa.app.config.debug_level,

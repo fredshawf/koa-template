@@ -9,7 +9,7 @@ const etag = require('koa-etag');
 const views = require('koa-views');
 
 const RouteSet = require('koa-actionpack').RouteSet;
-const router = Koa.router = new RouteSet(Koa.root);
+const router = Koa.router = new RouteSet(Koa.app.root);
 
 module.exports = [
   koa_static('public'),
@@ -29,14 +29,14 @@ module.exports = [
   },
   
   // 异常处理
-  koa_error({engine: 'ejs', template: `${Koa.root}/public/error.ejs`}),
+  koa_error({engine: 'ejs', template: `${Koa.app.root}/public/error.ejs`}),
   // 回话
   koa_session({},Koa.app),
   // 参数
   koa_body({
     multipart:true, // 支持文件上传
     formidable:{
-      // uploadDir: Koa.root + '/public/upload/', // 设置文件上传目录
+      // uploadDir: Koa.app.root + '/public/upload/', // 设置文件上传目录
       keepExtensions: true,    // 保持文件的后缀
       maxFieldsSize:2 * 1024 * 1024, // 文件上传大小
       onFileBegin:(name,file) => {} // 文件上传前的设置
@@ -48,7 +48,7 @@ module.exports = [
   etag(),
   
   // 视图引擎
-  views(Koa.root + '/app/views', {
+  views(Koa.app.root + '/app/views', {
     extension: 'ejs'
   }),
   
