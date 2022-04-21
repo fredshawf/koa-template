@@ -50,7 +50,7 @@ module.exports = class Boot {
   
   
   _initialize_logger() {
-    Koa.logger = require('./logger')
+    Koa.app.logger = require('./logger')
   }
   
   

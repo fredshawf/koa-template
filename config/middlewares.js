@@ -20,12 +20,12 @@ module.exports = [
     let time_zone = `${begin_time.getTimezoneOffset() > 0 ? '-' : '+'}${Math.abs(begin_time.getTimezoneOffset())/60}`;
     let timeStr = `${begin_time.toLocaleDateString()} ${begin_time.toLocaleTimeString()} ${time_zone}`;
     let begin_log = `Started ${ctx.method} "${ctx.path}" at ${timeStr}`;
-    Koa.logger.info(begin_log);
+    Koa.app.logger.info(begin_log);
     // call next
     await next();
     let end_time = new Date();
     let end_log = `Completed ${ctx.status} ${ctx.message} in ${end_time - begin_time}ms\n`;
-    Koa.logger.info(end_log);
+    Koa.app.logger.info(end_log);
   },
   
   // 异常处理

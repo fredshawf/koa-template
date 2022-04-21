@@ -24,16 +24,16 @@ class BaseModel extends Model {
     config = Object.assign(config, {
       log: {
         warn(message) {
-          // Koa.logger.warn(message);
+          // Koa.app.logger.warn(message);
         },
         error(message) {
-          // Koa.logger.error(message);
+          // Koa.app.logger.error(message);
         },
         deprecate(message) {
-          // Koa.logger.deprecate(message);
+          // Koa.app.logger.deprecate(message);
         },
         debug(message) {
-          Koa.logger.debug(`  [1m[35mSQL[0m ${message.sql} [${message.bindings.toString()}]`);
+          Koa.app.logger.debug(`  [1m[35mSQL[0m ${message.sql} [${message.bindings.toString()}]`);
         },
       }
     });
