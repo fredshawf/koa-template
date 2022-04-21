@@ -32,10 +32,6 @@ module.exports = class Boot {
     let env_config = require(`./environments/${Koa.app.env}`);
     Koa.app.config = Object.assign(global_config, env_config);
 
-    // cookie salt config 
-    let app_keys = require(`./keys`);
-    Koa.app.config.app_keys = app_keys[Koa.app.env];
-
     // database config
     let database_configs = require(`./database`);
     Koa.app.config.database_configs = database_configs[Koa.app.env];

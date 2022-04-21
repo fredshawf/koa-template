@@ -10,6 +10,9 @@ module.exports = {
   
   
   // TODO: 邮件相关配置
+
+  // 有关cookie和session加密相关
+  app_keys: ["123"]
   
   
   
