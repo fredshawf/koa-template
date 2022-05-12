@@ -1,6 +1,6 @@
-const Model = require('./base_model')
+const Koa = require('koa');
 
-module.exports = class User extends Model {
+module.exports = class User extends Koa.app.BaseModel {
   static get tableName() {
       return 'users';
   }

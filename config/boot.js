@@ -31,10 +31,6 @@ module.exports = class Boot {
     let global_config = require(`./environments/global`);
     let env_config = require(`./environments/${Koa.app.env}`);
     Koa.app.config = Object.assign(global_config, env_config);
-
-    // database config
-    let database_configs = require(`./database`);
-    Koa.app.config.database_configs = database_configs[Koa.app.env];
   }
 
   

@@ -1,7 +1,9 @@
 const knex = require('knex');
 const { Model } = require('objection');
-const db_configs = Koa.app.config.database_configs;
 
+// database config
+let database_configs = require(`../database`);
+const db_configs = database_configs[Koa.app.env];
 
 class BaseModel extends Model {
 
@@ -54,4 +56,4 @@ BaseModel.prototype['$beforeUpdate'] = function() {
 }
 
 BaseModel.set_knex();
-module.exports = BaseModel;
+Koa.app.BaseModel = BaseModel;
