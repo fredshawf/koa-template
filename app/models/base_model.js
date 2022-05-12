@@ -43,5 +43,15 @@ class BaseModel extends Model {
 
 }
 
+BaseModel.prototype['$beforeInsert'] = function() {
+  this.created_at = new Date().toLocaleString();
+  this.updated_at = new Date().toLocaleString();
+}
+
+
+BaseModel.prototype['$beforeUpdate'] = function() {
+  this.updated_at = new Date().toLocaleString();
+}
+
 BaseModel.set_knex();
 module.exports = BaseModel;
